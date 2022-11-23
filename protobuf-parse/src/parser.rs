@@ -102,7 +102,14 @@ impl Parser {
     pub fn parse_and_typecheck(&self) -> anyhow::Result<ParsedAndTypechecked> {
         match &self.which_parser {
             WhichParser::Pure => {
-                pure::parse_and_typecheck::parse_and_typecheck(&self)
+                let r = pure::parse_and_typecheck::parse_and_typecheck(&self);
+                match r {
+                    Ok(v) => Ok(v),
+                    Err(e) => {
+                        error!("pure::parse_and_typecheck::parse_and_typecheck err:{}", e);
+                        Err(e)
+                    }
+                }
             }
             WhichParser::Protoc => protoc::parse_and_typecheck::parse_and_typecheck(&self)
                 .context("using protoc parser"),
