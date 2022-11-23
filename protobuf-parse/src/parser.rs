@@ -110,6 +110,7 @@ impl Parser {
                         Err(e)
                     }
                 }
+
             }
             WhichParser::Protoc => protoc::parse_and_typecheck::parse_and_typecheck(&self)
                 .context("using protoc parser"),
