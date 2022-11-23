@@ -41,6 +41,7 @@ fn main() {
     // Set field.
     aaa_field.set_singular_field(&mut *mmm, ReflectValueBox::I32(42));
 
+
     // Now serialize it to binary format.
     // field number = 1
     // wire_type = 0 (varint)

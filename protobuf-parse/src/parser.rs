@@ -5,6 +5,7 @@ use std::path::Path;
 use std::path::PathBuf;
 
 use anyhow::Context;
+use log::error;
 use protobuf::descriptor::FileDescriptorSet;
 
 use crate::protoc;
@@ -101,7 +102,11 @@ impl Parser {
     pub fn parse_and_typecheck(&self) -> anyhow::Result<ParsedAndTypechecked> {
         match &self.which_parser {
             WhichParser::Pure => {
-                pure::parse_and_typecheck::parse_and_typecheck(&self).context("using pure parser")
+                let r = pure::parse_and_typecheck::parse_and_typecheck(&self);
+                if let Err(e) = r {
+                    error!("pure::parse_and_typecheck::parse_and_typecheck err:{}", e);
+                }
+                r.context("using pure parser")
             }
             WhichParser::Protoc => protoc::parse_and_typecheck::parse_and_typecheck(&self)
                 .context("using protoc parser"),
